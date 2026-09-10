@@ -3,20 +3,44 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sipsan</title>
-<style>body{font-family:system-ui;margin:40px}code{background:#eee;padding:2px 6px;border-radius:6px}</style>
+<title>Sipsan Toko</title>
+<style>
+body{font-family:system-ui;margin:0;background:#f6f6f6}
+header{background:#111;color:#fff;padding:16px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:16px}
+.card{background:#fff;border-radius:12px;padding:12px;text-align:center}
+.card button{background:#111;color:#fff;border:0;border-radius:8px;padding:8px 12px}
+#cart{position:sticky;bottom:0;background:#fff;border-top:1px solid #ddd;padding:12px;text-align:center}
+</style>
 </head>
 <body>
-<h1>Sipsan jalan</h1>
-<p>Project siap dihubungkan ke GitHub, Vercel, dan Firebase.</p>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-const firebaseConfig = {
-  apiKey: "ISI_DARI_FIREBASE_CONSOLE",
-  authDomain: "ISI.firebaseapp.com",
-  projectId: "ISI_PROJECT_ID"
-};
-console.log("Isi firebaseConfig dengan punyamu:", firebaseConfig);
+<header><h1>Sipsan Toko</h1><p>Toko sederhana, checkout via WhatsApp</p></header>
+<div class="grid" id="list"></div>
+<div id="cart">Keranjang: <span id="count">0</span> | Total: Rp<span id="total">0</span><br><br><button onclick="checkout()">Checkout WA</button></div>
+<script>
+const WA_NUMBER = "6280000000000";
+const products = [
+  {id:1,name:"Kopi Susu",price:15000},
+  {id:2,name:"Teh Manis",price:8000},
+  {id:3,name:"Roti Bakar",price:12000}
+];
+let cart = [];
+const list = document.getElementById("list");
+products.forEach(p=>{
+  const d=document.createElement("div");
+  d.className="card";
+  d.innerHTML=`<h3>${p.name}</h3><p>Rp${p.price}</p><button onclick="add(${p.id})">+ Keranjang</button>`;
+  list.appendChild(d);
+});
+function add(id){
+  cart.push(products.find(p=>p.id===id));
+  document.getElementById("count").textContent=cart.length;
+  document.getElementById("total").textContent=cart.reduce((s,p)=>s+p.price,0);
+}
+function checkout(){
+  const text=encodeURIComponent("Halo, saya mau pesan: "+cart.map(p=>p.name).join(", ")+" Total Rp"+cart.reduce((s,p)=>s+p.price,0));
+  window.open(`https://wa.me/${WA_NUMBER}?text=${text}`,"_blank");
+}
 </script>
 </body>
 </html>
