@@ -6,63 +6,102 @@
 <title>Sipsan Toko</title>
 <style>
 *{box-sizing:border-box}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto;margin:0;background:#fffdf7;color:#4a3f35}
-header{background:#ffffff;color:#4a3f35;padding:28px 16px;text-align:center;border-bottom:3px solid #f5e6cc}
-header h1{margin:0;font-size:28px}
-header p{margin:6px 0 0;opacity:.7}
-.search{max-width:520px;margin:-18px auto 0;padding:0 16px}
-.search input{width:100%;padding:12px 16px;border-radius:999px;border:1px solid #eadfc8;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;padding:20px 16px 90px;max-width:900px;margin:0 auto}
-.card{background:#fffaf0;border:1px solid #f5e6cc;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.card .img{font-size:40px;background:#f5e6cc;border-radius:12px;padding:10px;margin-bottom:8px;color:#7a5c3e;min-height:64px;display:flex;align-items:center;justify-content:center}
-.card .img img{width:100%;height:100px;object-fit:cover;border-radius:10px}
-.card h3{margin:8px 0 4px;font-size:16px}
-.price{color:#8b5e34;font-weight:700;margin:0 0 10px}
-.card button{background:#4a3f35;color:#fff8e7;border:0;border-radius:999px;padding:9px 14px;width:100%;font-weight:600}
-.card button:active{transform:scale(.97)}
-#cart{position:fixed;left:0;right:0;bottom:0;background:#ffffff;color:#4a3f35;border-top:2px solid #f5e6cc;padding:12px 16px;display:flex;gap:10px;align-items:center;justify-content:center}
+body{font-family:system-ui;margin:0;background:#fffdf7;color:#4a3f35}
+header{background:#fff;color:#4a3f35;padding:20px 16px;text-align:center;border-bottom:3px solid #f5e6cc}
+nav{display:flex;gap:8px;justify-content:center;padding:12px;background:#fffaf0;border-bottom:1px solid #f5e6cc;position:sticky;top:0;z-index:5}
+nav button{border:1px solid #eadfc8;background:#fff;border-radius:999px;padding:8px 14px}
+nav button.on{background:#4a3f35;color:#fff8e7}
+.wrap{max-width:900px;margin:0 auto;padding:16px 16px 100px}
+.search input{width:100%;padding:12px 16px;border-radius:999px;border:1px solid #eadfc8;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:14px}
+.card{background:#fffaf0;border:1px solid #f5e6cc;border-radius:16px;padding:14px;text-align:center}
+.card .img{background:#f5e6cc;border-radius:12px;min-height:64px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#7a5c3e;overflow:hidden}
+.card .img img{width:100%;height:110px;object-fit:cover}
+.price{color:#8b5e34;font-weight:700}
+.btn{background:#4a3f35;color:#fff8e7;border:0;border-radius:999px;padding:9px 14px;width:100%;font-weight:600;margin-top:6px}
+.btn2{background:#fff;border:1px solid #eadfc8;border-radius:999px;padding:8px 12px;margin:2px}
+#cart{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:2px solid #f5e6cc;padding:12px;display:flex;gap:10px;align-items:center;justify-content:center}
 #cart button{background:#c9a86a;border:0;color:#fff;border-radius:999px;padding:10px 18px;font-weight:700}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+td,th{border-bottom:1px solid #f5e6cc;padding:8px;text-align:left;font-size:14px}
+input,select{padding:10px;border-radius:10px;border:1px solid #eadfc8;width:100%;margin:4px 0;background:#fff}
+.form{background:#fff;border:1px solid #f5e6cc;border-radius:14px;padding:12px;margin-bottom:12px}
+.page{display:none}.page.on{display:block}
 </style>
 </head>
 <body>
-<header><h1>Sipsan Toko</h1><p>Segar, murah, pesan via WhatsApp</p></header>
-<div class="search"><input id="q" placeholder="Cari: ayam, susu..." oninput="render()" /></div>
+<header><h1>Sipsan Toko</h1><p>Putih Cream</p></header>
+<nav>
+<button id="b-toko" class="on" onclick="show('toko')">Toko</button>
+<button id="b-riwayat" onclick="show('riwayat')">Riwayat</button>
+<button id="b-laporan" onclick="show('laporan')">Laporan</button>
+<button id="b-kelola" onclick="show('kelola')">Kelola Menu</button>
+</nav>
+<div class="wrap">
+<div id="p-toko" class="page on">
+<div class="search"><input id="q" placeholder="Cari..." oninput="render()"></div>
 <div class="grid" id="list"></div>
+</div>
+<div id="p-riwayat" class="page">
+<h3>Riwayat Transaksi</h3>
+<div><button class="btn2" onclick="clearTx()">Hapus Semua</button></div>
+<div id="txlist"></div>
+</div>
+<div id="p-laporan" class="page">
+<h3>Laporan</h3>
+<div id="lap"></div>
+</div>
+<div id="p-kelola" class="page">
+<h3>Kelola Menu</h3>
+<div class="form">
+<input id="f-name" placeholder="Nama, misal Ayam Bakar">
+<input id="f-price" type="number" placeholder="Harga, misal 18000">
+<input id="f-file" type="file" accept="image/*">
+<input id="f-id" type="hidden">
+<button class="btn" onclick="saveProduct()">Simpan</button>
+<button class="btn2" onclick="resetForm()">Batal</button>
+</div>
+<div class="grid" id="adminlist"></div>
+</div>
+</div>
 <div id="cart"><span><span id="count">0</span> item | Rp<span id="total">0</span></span><button onclick="checkout()">Checkout WA</button></div>
 <script>
-const WA_NUMBER = "6280000000000";
-const products = [
-  {id:1,name:"Kopi Susu",price:15000,icon:"K"},
-  {id:2,name:"Teh Manis",price:8000,icon:"T"},
-  {id:3,name:"Roti Bakar",price:12000,icon:"R"},
-  {id:4,name:"Ayam Bakar",price:18000,icon:"A",img:"images/ayam.jpg"},
-  {id:5,name:"Susu Coklat",price:6000,icon:"S",img:"images/susu-coklat.jpg"},
-  {id:6,name:"Susu UHT",price:6000,icon:"U",img:"images/susu-uht.jpg"},
-  {id:7,name:"Nobo Oat Milk",price:4000,icon:"O",img:"images/oat.jpg"}
+const WA_NUMBER="6280000000000";
+const DEF=[
+{id:1,name:"Kopi Susu",price:15000,icon:"K"},
+{id:2,name:"Teh Manis",price:8000,icon:"T"},
+{id:3,name:"Roti Bakar",price:12000,icon:"R"},
+{id:4,name:"Ayam Bakar",price:18000,icon:"A",img:"images/ayam.jpg"},
+{id:5,name:"Susu Coklat",price:6000,icon:"S",img:"images/susu-coklat.jpg"},
+{id:6,name:"Susu UHT",price:6000,icon:"U",img:"images/susu-uht.jpg"},
+{id:7,name:"Nobo Oat Milk",price:4000,icon:"O",img:"images/oat.jpg"}
 ];
-let cart = [];
-function render(){
-  const q=document.getElementById("q").value.toLowerCase();
-  const list=document.getElementById("list");
-  list.innerHTML="";
-  products.filter(p=>p.name.toLowerCase().includes(q)).forEach(p=>{
-    const d=document.createElement("div");
-    d.className="card";
-    const visual=p.img?`<div class="img"><img src="${p.img}" onerror="this.outerHTML='${p.icon}'" alt="${p.name}"></div>`:`<div class="img">${p.icon}</div>`;
-    d.innerHTML=`${visual}<h3>${p.name}</h3><p class="price">Rp${p.price.toLocaleString("id-ID")}</p><button onclick="add(${p.id})">+ Keranjang</button>`;
-    list.appendChild(d);
-  });
-}
-function add(id){
-  cart.push(products.find(p=>p.id===id));
-  document.getElementById("count").textContent=cart.length;
-  document.getElementById("total").textContent=cart.reduce((s,p)=>s+p.price,0).toLocaleString("id-ID");
-}
-function checkout(){
-  if(!cart.length){alert("Keranjang masih kosong");return}
-  const text=encodeURIComponent("Halo Sipsan, saya mau pesan: "+cart.map(p=>p.name).join(", ")+" Total Rp"+cart.reduce((s,p)=>s+p.price,0));
-  window.open(`https://wa.me/${WA_NUMBER}?text=${text}`,"_blank");
-}
+let products=JSON.parse(localStorage.getItem("sipsan_products")||"null")||DEF;
+let cart=[];
+let tx=JSON.parse(localStorage.getItem("sipsan_tx")||"[]");
+let tmpImg="";
+document.getElementById("f-file").addEventListener("change",e=>{
+const f=e.target.files[0];
+if(!f){tmpImg="";return}
+const r=new FileReader();
+r.onload=()=>{tmpImg=r.result};
+r.readAsDataURL(f);
+});
+function saveLS(){localStorage.setItem("sipsan_products",JSON.stringify(products));localStorage.setItem("sipsan_tx",JSON.stringify(tx))}
+function show(n){document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));document.querySelectorAll("nav button").forEach(b=>b.classList.remove("on"));document.getElementById("p-"+n).classList.add("on");document.getElementById("b-"+n).classList.add("on");if(n==="riwayat")renderTx();if(n==="laporan")renderLap();if(n==="kelola")renderAdmin()}
+function visual(p){if(p.img)return `<div class="img"><img src="${p.img}" onerror="this.parentElement.textContent='${p.icon||p.name[0]}'"></div>`;return `<div class="img">${p.icon||p.name[0]}</div>`}
+function render(){const q=document.getElementById("q").value.toLowerCase();const list=document.getElementById("list");list.innerHTML="";products.filter(p=>p.name.toLowerCase().includes(q)).forEach(p=>{const d=document.createElement("div");d.className="card";d.innerHTML=`${visual(p)}<h3>${p.name}</h3><p class="price">Rp${Number(p.price).toLocaleString("id-ID")}</p><button class="btn" onclick="add(${p.id})">+ Keranjang</button>`;list.appendChild(d)})}
+function add(id){const p=products.find(x=>x.id===id);cart.push(p);document.getElementById("count").textContent=cart.length;document.getElementById("total").textContent=cart.reduce((s,x)=>s+Number(x.price),0).toLocaleString("id-ID")}
+function checkout(){if(!cart.length){alert("Keranjang kosong");return}const total=cart.reduce((s,x)=>s+Number(x.price),0);tx.unshift({date:new Date().toLocaleString("id-ID"),items:cart.map(x=>x.name),total});cart=[];document.getElementById("count").textContent=0;document.getElementById("total").textContent=0;saveLS();const t=encodeURIComponent("Halo, pesan: "+tx[0].items.join(", ")+" Total Rp"+total);window.open(`https://wa.me/${WA_NUMBER}?text=${t}`,"_blank");renderTx()}
+function renderTx(){const el=document.getElementById("txlist");if(!tx.length){el.innerHTML="<p>Belum ada transaksi</p>";return}el.innerHTML="<table><tr><th>Tanggal</th><th>Isi</th><th>Total</th><th></th></tr>"+tx.map((r,i)=>`<tr><td>${r.date}</td><td>${r.items.join(", ")}</td><td>Rp${Number(r.total).toLocaleString("id-ID")}</td><td><button class="btn2" onclick="delTx(${i})">Hapus</button></td></tr>`).join("")+"</table>"}
+function delTx(i){tx.splice(i,1);saveLS();renderTx()}
+function clearTx(){if(!confirm("Hapus semua riwayat?"))return;tx=[];saveLS();renderTx()}
+function renderLap(){const om=tx.reduce((s,x)=>s+Number(x.total),0);const cnt={};tx.forEach(r=>r.items.forEach(n=>cnt[n]=(cnt[n]||0)+1));const best=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);document.getElementById("lap").innerHTML=`<p>Total Transaksi: <b>${tx.length}</b></p><p>Omzet: <b>Rp${om.toLocaleString("id-ID")}</b></p><h4>Terlaris</h4><table>${best.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}x</td></tr>`).join("")||"<tr><td>Belum ada</td></tr>"}</table>`}
+function renderAdmin(){const el=document.getElementById("adminlist");el.innerHTML="";products.forEach(p=>{const d=document.createElement("div");d.className="card";d.innerHTML=`${visual(p)}<h3>${p.name}</h3><p class="price">Rp${Number(p.price).toLocaleString("id-ID")}</p><button class="btn2" onclick="editP(${p.id})">Edit</button><button class="btn2" onclick="delP(${p.id})">Hapus</button>`;el.appendChild(d)})}
+function saveProduct(){const name=document.getElementById("f-name").value.trim();const price=Number(document.getElementById("f-price").value);const id=Number(document.getElementById("f-id").value);if(!name||!price){alert("Isi nama dan harga");return}if(id){const p=products.find(x=>x.id===id);p.name=name;p.price=price;if(tmpImg)p.img=tmpImg}else{const nid=products.length?Math.max(...products.map(x=>x.id))+1:1;products.push({id:nid,name,price,icon:name[0].toUpperCase(),img:tmpImg||""})}tmpImg="";document.getElementById("f-file").value="";resetForm();saveLS();render();renderAdmin()}
+function editP(id){const p=products.find(x=>x.id===id);document.getElementById("f-name").value=p.name;document.getElementById("f-price").value=p.price;document.getElementById("f-id").value=p.id;window.scrollTo(0,0)}
+function delP(id){if(!confirm("Hapus menu ini?"))return;products=products.filter(x=>x.id!==id);saveLS();render();renderAdmin()}
+function resetForm(){document.getElementById("f-name").value="";document.getElementById("f-price").value="";document.getElementById("f-id").value="";tmpImg=""}
 render();
 </script>
 </body>
