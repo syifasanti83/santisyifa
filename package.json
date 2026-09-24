@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "npx serve .",
-    "build": "echo build ok"
+    "build": "node build.mjs"
   }
 }
