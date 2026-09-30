@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="id">
 <head>
@@ -19,8 +18,8 @@ nav button.on{background:#4a3f35;color:#fff;border-color:#4a3f35}
 .card .img{background:#f5e6cc;border-radius:10px;padding:10px;margin-bottom:10px;font-size:30px;color:#7a5c3e}
 .price{color:#8b5e34;font-weight:bold;margin:10px 0}
 .btn{background:#4a3f35;color:#fff;border:none;border-radius:999px;padding:8px 16px;width:100%;font-weight:bold;margin-top:5px}
-#cart{position:fixed;bottom: 0;background:#ffffff;color:#4a3f35;border-top:2px solid #f5e6cc;padding:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
-#cart button{background:#c9a86a;color:#fff;border:none;border-radius:999x;padding:8px 16px}
+#cart{position:fixed;bottom:0;background:#ffffff;color:#4a3f35;border-top:2px solid #f5e6cc;padding:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
+#cart button{background:#c9a86a;color:#fff;border:none;border-radius:999px;padding:8px 16px}
 </style>
 </head>
 <body>
@@ -29,4 +28,39 @@ nav button.on{background:#4a3f35;color:#fff;border-color:#4a3f35}
 <button id="b-toko" class="on" onclick="show('toko')">Toko</button>
 <button id="b-riwayat" onclick="show('riwayat')">Riwayat</button>
 <button id="b-laporan" onclick="show('laporan')">Laporan</button>
-<button id="b-kelola" onclick="show('kelola')">Kelola Menu
+<button id="b-kelola" onclick="show('kelola')">Kelola Menu</button>
+</div>
+<div class="wrap">
+<div id="p-toko" class="page on"><div class="search"><input id="q" type="text" placeholder="Cari..." oninput="render()"></div><div class="grid" id="list"></div></div>
+<div id="p-riwayat" class="page"><h3>Riwayat Transaksi</h3><div><button class="btn2" onclick="clearTx()">Hapus Semua</button></div><div id="txlist"></div></div>
+<div id="p-laporan" class="page"><h3>Laporan</h3><div id="lap"></div></div>
+<div id="p-kelola" class="page"><h3>Kelola Menu</h3><div class="form"><input id="f-name" placeholder="Nama, misal Ayam Bakar"><input id="f-price" type="number" placeholder="Harga, misal 18000"><input id="f-file" type="file" accept="image/*"><input id="f-id" type="hidden"><button class="btn" onclick="saveProduct()">Simpan</button><button class="btn2" onclick="resetForm()">Batal</button></div><div class="grid" id="adminlist"></div></div></div>
+<div id="cart"><span><span id="count">0</span> item | Rp<span id="total">0</span></span><button onclick="checkout()">Checkout WA</button></div>
+<script>
+const products = [
+  {id:1,name:"Kopi Susu",price:15000,icon:"K"},
+  {id:2,name:"Teh Manis",price:8000,icon:"T"},
+  {id:3,name:"Roti Bakar",price:12000,icon:"R"},
+  {id:4,name:"Ayam Bakar",price:18000,icon:"A"},
+  {id:5,name:"Susu Coklat",price:6000,icon:"S"},
+  {id:6,name:"Susu UHT",price:6000,icon:"U"},
+  {id:7,name:"Nobo Oat Milk",price:4000,icon:"O"}
+];
+let cart = [];
+function render(q=''){
+  const list=document.getElementById('list');
+  list.innerHTML='';
+  products.filter(p=>p.name.toLowerCase().includes(q)).forEach(p=>{
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=`<div class="img">${p.icon}</div><h3>${p.name}</h3><p class="price">Rp${Number(p.price).toLocaleString("id-ID")}</p><button class="btn" onclick="add(${p.id})">+ Keranjang</button>`;
+    list.appendChild(d);
+  });
+  document.getElementById('cart').innerHTML=`<span><span id="count">0</span> item | Rp<span id="total">0</span></span><button onclick="checkout()">Checkout WA</button>`;
+}
+function add(id){const p=products.find(x=>x.id===id);cart.push(p);document.getElementById("count").textContent=cart.length;document.getElementById("total").textContent=cart.reduce((s,x)=>s+x.price,0).toLocaleString("id-ID");}
+function checkout(){if(!cart.length){alert("Keranjang kosong");return}const text=encodeURIComponent("Halo, pesan: "+cart.map(p=>p.name).join(", ")+" Total Rp"+cart.reduce((s,p)=>s+p.price,0));window.open(`https://wa.me/6280000000000?text=${text}`,"_blank");}
+render();
+</script>
+</body>
+</html>
